@@ -1,4 +1,4 @@
-package me.rojo8399.lockit.listeners;
+package me.rojo8399.lec.listeners;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +12,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.cause.Cause;
 
-import me.rojo8399.lockit.LockIt;
+import me.rojo8399.lec.LEC;
 
 public class BlockListener {
 	
@@ -25,7 +25,7 @@ public class BlockListener {
 	@Listener
 	public void onBlockPlace(ChangeBlockEvent.Place e) {
 		
-		if (!LockIt.ENABLED) {
+		if (!LEC.ENABLED) {
 			return;
 		}
 		

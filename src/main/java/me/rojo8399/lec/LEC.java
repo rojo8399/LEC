@@ -1,4 +1,4 @@
-package me.rojo8399.lockit;
+package me.rojo8399.lec;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,13 +17,13 @@ import org.spongepowered.api.plugin.PluginContainer;
 
 import com.google.inject.Inject;
 
-import me.rojo8399.lockit.listeners.BlockListener;
+import me.rojo8399.lec.listeners.BlockListener;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 
-@Plugin(id = "lockit")
-public class LockIt {
+@Plugin(id = "lec", name = "LEC", authors = "rojo8399, NikDev", version = "0.0.1")
+public class LEC {
 	
 	public static boolean ENABLED = true;
 	
@@ -33,12 +33,12 @@ public class LockIt {
 	@Inject
 	private PluginContainer pluginContainer;
 	
-	public LockIt() {
+	public LEC() {
 	}
 	
 	@Inject
 	public static void getlogger(Logger logger) {
-		LockIt.logger = logger;
+		LEC.logger = logger;
 	}
 	
 	@Inject

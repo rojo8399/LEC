@@ -1,4 +1,4 @@
-package me.rojo8399.lockit.events;
+package me.rojo8399.lec.events;
 
 import org.spongepowered.api.event.Cancellable;
 import org.spongepowered.api.event.cause.Cause;
