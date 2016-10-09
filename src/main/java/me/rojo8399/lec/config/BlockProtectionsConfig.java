@@ -10,18 +10,19 @@ import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 
-public class Config implements Configurable {
-	private static Config config = new Config();
 
-	private Config() {
+public class BlockProtectionsConfig implements Configurable {
+	private static BlockProtectionsConfig config = new BlockProtectionsConfig();
+
+	private BlockProtectionsConfig() {
 		;
 	}
 
-	public static Config getConfig() {
+	public static BlockProtectionsConfig getConfig() {
 		return config;
 	}
 
-	private Path configFile = Paths.get(LEC.instance().getConfigDir() + "/config.conf");
+	private Path configFile = Paths.get(LEC.instance().getConfigDir() + "/data/blockprotections.conf");
 	private ConfigurationLoader<CommentedConfigurationNode> configLoader = HoconConfigurationLoader.builder()
 			.setPath(configFile).build();
 	private CommentedConfigurationNode configNode;
@@ -62,16 +63,12 @@ public class Config implements Configurable {
 
 	@Override
 	public void populate() {
-		get().getNode("ConfigVersion").setValue(1.0);
-		get().getNode("LEC").setComment("Contains all LEC related settings.");
-		get().getNode("LEC","enabled").setValue(true)
-			.setComment("Set to True to enable LEC. Set to False to disable LEC.");
-		get().getNode("LEC", "onlyProtectWhenOwnerIsOnline").setValue(false).setComment("WIP. Does nothing at the moment.");
-		get().getNode("LEC", "onlyProtectWhenOwnerIsOffline").setValue(false).setComment("WIP. Does nothing at the moment.");
-		get().getNode("LEC", "denyRedstone").setValue(true).setComment("WIP. Does nothing at the moment.");
-		get().getNode("LEC", "denyHoppers").setValue(true).setComment("WIP. Does nothing at the moment.");
-		get().getNode("LEC", "autoRegister").setValue(false);
-		get().getNode("LEC", "ignoreBlockDestruction").setValue(false);
+		get().getNode("protections").setComment("Contains all LEC related settings.");
+		
+		get().getNode("protections", "blocks", "minecraft:chest", "enabled").setValue(true);
+		get().getNode("protections", "blocks", "minecraft:chest", "autoRegister").setValue("private");
+		get().getNode("protections", "blocks", "minecraft:furnace", "enabled").setValue(true);
+		get().getNode("protections", "blocks", "minecraft:furnace", "autoRegister").setValue("private");
 		
 		/*
 		get().getNode("polis").setComment("Contains all Polis related settings.");

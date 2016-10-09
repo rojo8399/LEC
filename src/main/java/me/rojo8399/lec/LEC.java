@@ -18,6 +18,8 @@ import org.spongepowered.api.plugin.PluginContainer;
 import com.google.inject.Inject;
 
 import me.rojo8399.lec.config.Config;
+import me.rojo8399.lec.config.BlockProtectionsConfig;
+import me.rojo8399.lec.listeners.BlockListener;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
 
@@ -26,6 +28,8 @@ public class LEC {
 
 	private static PluginContainer plugin;
 	private static LEC instance;
+	public static Boolean ENABLED;
+	public static Boolean autoRegister;
 
 	@Inject
 	private Logger log;
@@ -55,7 +59,7 @@ public class LEC {
 			}
 		}
 		
-		//Create Chests Directory for LEC
+		//Create Data Directory for LEC
 		if (!Files.exists(configDir.resolve("data"))) {
 			try {
 				Files.createDirectories(configDir.resolve("data"));
@@ -66,6 +70,12 @@ public class LEC {
 		
 		// Create config.conf
 		Config.getConfig().setup();
+		// Create protections.conf
+		BlockProtectionsConfig.getConfig().setup();
+		
+		//Check if plugin is enabled
+		ENABLED = Config.getConfig().get().getNode("LEC", "enabled").getBoolean();
+		autoRegister = Config.getConfig().get().getNode("LEC", "autoRegister").getBoolean();
 		
 		
 	}
@@ -76,8 +86,9 @@ public class LEC {
 
 	@Listener
 	public void onPostInitializationEvent(GamePostInitializationEvent event) {
-
+		
 		// Register Listeners
+		Sponge.getEventManager().registerListeners(this, new BlockListener());
 		// Register Commands
 		// Register Events
 
