@@ -6,11 +6,13 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.title.Title;
 
 import com.flowpowered.math.vector.Vector3i;
 
 import me.rojo8399.lec.LEC;
+import me.rojo8399.lec.api.lecAPI;
 import me.rojo8399.lec.config.BlockProtectionsConfig;
 
 public class BlockListener {
@@ -25,7 +27,8 @@ public class BlockListener {
 		Cause cause = event.getCause();
 
 		Optional<Player> player = cause.first(Player.class);
-		Vector3i pos = event.getTransactions().get(0).getFinal().getPosition();
+		Vector3i location = event.getTransactions().get(0).getFinal().getPosition();
+		String blockName = event.getTransactions().get(0).getOriginal().getExtendedState().getName();
 
 		// If ignoring block destruction, cancel function
 		if (BlockProtectionsConfig.getConfig().get().getNode("protections", "settings", "ignoreBlockDestruction")
@@ -37,7 +40,7 @@ public class BlockListener {
 		if (player.isPresent()) {
 			Player p = player.get();
 
-			Object blockUUID = BlockProtectionsConfig.getConfig().get().getNode("protections", pos.toString(), "owner").getValue();
+			Object blockUUID = BlockProtectionsConfig.getConfig().get().getNode("protections", location.toString(), "owner").getValue();
 			String playerUUID = p.getUniqueId().toString();
 			
 
@@ -46,9 +49,8 @@ public class BlockListener {
 				p.sendMessage(Text.of("playerUUID: " + playerUUID));
 			} // Block is Protected and owner broke it
 			else if (playerUUID.equals(blockUUID)) {
-				p.sendMessage(Text.of("You broke a block you owned!"));
-				BlockProtectionsConfig.getConfig().get().getNode("protections").removeChild(pos.toString());
-				BlockProtectionsConfig.getConfig().save();
+				p.sendMessage(Text.builder("Protected").color(TextColors.GREEN).append(Text.builder(blockName).color(TextColors.GREEN).append(Text.builder("Removed").build()).build()).build());
+				lecAPI.protectBlock(location, p);
 			} // Block isn't protected
 			else if (!(playerUUID.equals(blockUUID))) {
 				if (!(p.hasPermission("lec.admin.bypass.block"))) {
